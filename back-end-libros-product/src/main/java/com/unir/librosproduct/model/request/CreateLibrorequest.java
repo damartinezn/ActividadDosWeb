@@ -1,9 +1,13 @@
 package com.unir.librosproduct.model.request;
 
-
 import lombok.*;
 
 import java.sql.Date;
+import java.util.List;
+import java.util.Set;
+
+import com.unir.librosproduct.model.pojo.Critica;
+import com.unir.librosproduct.model.pojo.Genero;
 
 @Getter
 @Setter
@@ -18,6 +22,9 @@ public class CreateLibrorequest {
     private String isbn10;
     private String imagen;
     private String sipnosis;
+    private String autor;
     private Integer cantidad;
+    List<Critica> listCriticas;
+    Set<Genero> listGenero;
 
 }

@@ -1,23 +1,34 @@
 package com.unir.librosproduct.service;
 
+import com.unir.librosproduct.data.GeneroRepository;
 import com.unir.librosproduct.data.LibroRepository;
+import com.unir.librosproduct.model.pojo.Genero;
 import com.unir.librosproduct.model.pojo.Libro;
 import com.unir.librosproduct.model.request.CreateLibrorequest;
+
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
-public class LibroServiceImpl implements LibroService{
+@Slf4j
+public class LibroServiceImpl implements LibroService {
 
     @Autowired
     private LibroRepository libroRepository;
+    @Autowired
+    private GeneroRepository generoRepository;
 
     @Override
     public List<Libro> getLibros() {
         List<Libro> libros = libroRepository.findAll();
+        log.info(" Request received for product : {} ", libros.get(0).getListGenero());
         return libros.isEmpty() ? null : libros;
     }
 
@@ -29,10 +40,10 @@ public class LibroServiceImpl implements LibroService{
     @Override
     public Boolean removeLibro(Long libroId) {
         Libro libro = libroRepository.findById(libroId).orElse(null);
-        if (libro != null){
+        if (libro != null) {
             libroRepository.delete(libro);
             return Boolean.TRUE;
-        }else {
+        } else {
             return Boolean.FALSE;
         }
     }
@@ -53,9 +64,26 @@ public class LibroServiceImpl implements LibroService{
                     .isbn10(request.getIsbn10())
                     .imagen(request.getImagen())
                     .sipnosis(request.getSipnosis())
-                    .cantidad(request.getCantidad()).build();
+                    .cantidad(request.getCantidad())
+                    .autor(request.getAutor()).build();
+            if (request.getListCriticas() != null && request.getListCriticas().size() > 0) {
+                libro.setListCriticas(request.getListCriticas());
+            }
+            if (request.getListGenero() != null && request.getListGenero().size() > 0) {
+                for (var genero : request.getListGenero()) {
+                    Genero aux = generoRepository.findById(genero.getCodigo()).orElse(null);
+                    if (aux != null && libro.getListGenero() != null &&  libro.getListGenero().size() > 0) {
+                        libro.getListGenero().add(aux);
+                    }
+                    if (aux != null && libro.getListGenero() == null) {
+                        Set<Genero> auxgen = new HashSet<>();
+                        auxgen.add(aux);
+                        libro.setListGenero(auxgen);
+                    }
+                }
+            }
             return libroRepository.save(libro);
-        } else{
+        } else {
             return null;
         }
     }

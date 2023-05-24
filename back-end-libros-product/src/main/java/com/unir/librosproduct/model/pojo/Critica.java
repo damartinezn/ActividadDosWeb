@@ -1,5 +1,7 @@
 package com.unir.librosproduct.model.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -25,5 +27,6 @@ public class Critica {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "libroId")
+    @JsonIgnore
     private Libro libroId;
 }

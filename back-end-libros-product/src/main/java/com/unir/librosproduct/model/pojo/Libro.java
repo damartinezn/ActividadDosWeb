@@ -18,48 +18,43 @@ import java.util.Set;
 @Builder
 @ToString
 public class Libro {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "libroId")
-    private Long libroId;
-    @Column(name = "titulo", unique = true, length = 255)
-    @NonNull
-    private String titulo;
-    @Column(name = "anioPublicacion")
-    @NonNull
-    private Date anioPublicacion;
-    @Column(name = "editorial")
-    @NonNull
-    private String editorial;
-    @Column(name = "isbn13", unique = true, length = 13)
-    private String isbn13;
-    @Column(name = "isbn10", unique = true, length = 10)
-    private String isbn10;
-    @Column(name = "imagen")
-    @NonNull
-    private String imagen;
-    @Column(name = "sipnosis")
-    @NonNull
-    private String sipnosis;
-    @Column(name = "cantidad")
-    @NonNull
-    private Integer cantidad;
+        @Id
+        @GeneratedValue(strategy = GenerationType.AUTO)
+        @Column(name = "libroId")
+        private Long libroId;
+        @Column(name = "titulo", unique = true, length = 255)
+        @NonNull
+        private String titulo;
+        @Column(name = "anioPublicacion")
+        @NonNull
+        private Date anioPublicacion;
+        @Column(name = "editorial")
+        @NonNull
+        private String editorial;
+        @Column(name = "isbn13", unique = true, length = 13)
+        private String isbn13;
+        @Column(name = "isbn10", unique = true, length = 10)
+        private String isbn10;
+        @Column(name = "imagen")
+        @NonNull
+        private String imagen;
+        @Column(name = "sipnosis")
+        @NonNull
+        private String sipnosis;
+        @Column(name = "cantidad")
+        @NonNull
+        private Integer cantidad;
+        @Column(name = "autor")
+        @NonNull
+        private String autor;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "libroId")
-    private List<Critica> listCriticas;
+        @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+        @JoinColumn(name = "libroId")
+        private List<Critica> listCriticas;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    @JoinTable(name = "libro_autor",
-            joinColumns = {@JoinColumn(name = "libroId")},
-            inverseJoinColumns = {@JoinColumn(name = "autorId")})
-    private Set<Autor> autores = new HashSet<>();
-
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    @JoinTable(name = "libro_genero",
-            joinColumns = {@JoinColumn(name = "libroId")},
-            inverseJoinColumns = {@JoinColumn(name = "codigo")})
-    private Set<Genero> listGenero = new HashSet<>();
+        @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+        @JoinTable(name = "libro_genero", joinColumns = { @JoinColumn(name = "libroId") }, inverseJoinColumns = {
+                        @JoinColumn(name = "codigo") })
+        @Builder.Default
+        private Set<Genero> listGenero = new HashSet<>();
 }

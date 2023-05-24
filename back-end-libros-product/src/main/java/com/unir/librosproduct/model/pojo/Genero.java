@@ -1,10 +1,13 @@
 package com.unir.librosproduct.model.pojo;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.HashSet;
-import java.util.Set;
 
 @Entity
 @Table(name = "genero")
@@ -24,6 +27,7 @@ public class Genero {
     @Column(name = "descripcion")
     private String descripcion;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "listGenero")
-    private Set<Libro> listLibro = new HashSet<>();
+    //@ManyToMany(mappedBy = "listGenero")
+    //@JsonIgnore
+    //private Set<Libro> listLibro = new HashSet<>();
 }
