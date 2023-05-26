@@ -21,29 +21,29 @@ public class LibroController {
     private final LibroService libroService;
 
     @GetMapping("/libros")
-    public ResponseEntity<List<Libro>> getLibros(@RequestHeader Map<String, String> headers){
+    public ResponseEntity<List<Libro>> getLibros(@RequestHeader Map<String, String> headers) {
         log.info(" headers : {} ", headers);
         List<Libro> libros = libroService.getLibros();
-        if (libros != null){
+        if (libros != null) {
             return ResponseEntity.ok(libros);
-        }else{
+        } else {
             return ResponseEntity.ok(Collections.emptyList());
         }
     }
 
     @GetMapping("/libros/{libroId}")
-    public ResponseEntity<Libro> getLibro(@PathVariable String libroId){
+    public ResponseEntity<Libro> getLibro(@PathVariable String libroId) {
         log.info(" Request received for product : {} ", libroId);
         Libro libros = libroService.getLibro(Long.parseLong(libroId));
-        if (libros != null){
+        if (libros != null) {
             return ResponseEntity.ok(libros);
-        }else{
+        } else {
             return ResponseEntity.notFound().build();
         }
     }
 
     @DeleteMapping("/libros/{libroId}")
-    public ResponseEntity<Void> deleteLibro(@PathVariable String libroId){
+    public ResponseEntity<Void> deleteLibro(@PathVariable String libroId) {
         log.info(" Request received for product : {} ", libroId);
         Boolean removed = libroService.removeLibro(Long.parseLong(libroId));
         if (Boolean.TRUE.equals(removed)) {
@@ -54,7 +54,7 @@ public class LibroController {
     }
 
     @PostMapping("/libros")
-    public ResponseEntity<Libro> saveLibro(@RequestBody CreateLibrorequest request){
+    public ResponseEntity<Libro> saveLibro(@RequestBody CreateLibrorequest request) {
         log.info(" Request save for libro : {} ", request.toString());
         Libro saveLibro = libroService.createLibro(request);
         if (saveLibro != null) {
@@ -64,5 +64,16 @@ public class LibroController {
         }
     }
 
+    @GetMapping("/alquilar/{alquilarId}")
+    public ResponseEntity<Libro> cantidadAlquilarLibro(@PathVariable String alquilarId) {
+        log.info(" Alquilar libro con los nuevos valores me pueden mandar todo me interes el id cantidad y días : {} ",
+        alquilarId);
+        Libro saveLibro = libroService.alquilarLibro(Long.parseLong(alquilarId));
+        if (saveLibro != null) {
+            return ResponseEntity.status(HttpStatus.CREATED).body(saveLibro);
+        } else {
+            return ResponseEntity.badRequest().build();
+        }
+    }
 
 }

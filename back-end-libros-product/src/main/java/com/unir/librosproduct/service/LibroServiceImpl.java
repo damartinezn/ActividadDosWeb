@@ -72,7 +72,7 @@ public class LibroServiceImpl implements LibroService {
             if (request.getListGenero() != null && request.getListGenero().size() > 0) {
                 for (var genero : request.getListGenero()) {
                     Genero aux = generoRepository.findById(genero.getCodigo()).orElse(null);
-                    if (aux != null && libro.getListGenero() != null &&  libro.getListGenero().size() > 0) {
+                    if (aux != null && libro.getListGenero() != null && libro.getListGenero().size() > 0) {
                         libro.getListGenero().add(aux);
                     }
                     if (aux != null && libro.getListGenero() == null) {
@@ -82,6 +82,17 @@ public class LibroServiceImpl implements LibroService {
                     }
                 }
             }
+            return libroRepository.save(libro);
+        } else {
+            return null;
+        }
+    }
+
+    @Override
+    public Libro alquilarLibro(Long libroId) {
+        if (libroId != null) {
+            Libro libro = libroRepository.findById(libroId).orElse(null);
+            libro.setCantidad(libro.getCantidad() - 1);
             return libroRepository.save(libro);
         } else {
             return null;

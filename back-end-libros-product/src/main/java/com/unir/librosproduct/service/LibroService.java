@@ -13,4 +13,6 @@ public interface LibroService {
     Boolean removeLibro(Long libroId);
 
     Libro createLibro(CreateLibrorequest request);
+
+    Libro alquilarLibro(Long libroId);
 }
