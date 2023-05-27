@@ -76,4 +76,15 @@ public class LibroController {
         }
     }
 
+    @PostMapping("/libros/buscar")
+    public ResponseEntity<List<Libro>> getLibrosByAllParams(@RequestBody CreateLibrorequest request) {
+        log.info(" Request save for libro : {} ", request.toString());
+        List<Libro> getLibros = libroService.getLibrosByAllParams(request);
+        if (getLibros != null) {
+            return ResponseEntity.ok(getLibros);
+        } else {
+            return ResponseEntity.ok(Collections.emptyList());
+        }
+    }
+
 }

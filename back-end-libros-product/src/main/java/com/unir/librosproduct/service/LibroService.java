@@ -10,6 +10,8 @@ public interface LibroService {
 
     Libro getLibro(Long libroId);
 
+    List<Libro> getLibrosByAllParams(CreateLibrorequest libroBuscar);
+
     Boolean removeLibro(Long libroId);
 
     Libro createLibro(CreateLibrorequest request);

@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -28,7 +29,6 @@ public class LibroServiceImpl implements LibroService {
     @Override
     public List<Libro> getLibros() {
         List<Libro> libros = libroRepository.findAll();
-        log.info(" Request received for product : {} ", libros.get(0).getListGenero());
         return libros.isEmpty() ? null : libros;
     }
 
@@ -97,5 +97,21 @@ public class LibroServiceImpl implements LibroService {
         } else {
             return null;
         }
+    }
+
+    @Override
+    public List<Libro> getLibrosByAllParams(CreateLibrorequest libroBuscar) {
+        List<Libro> libros = new ArrayList<>();
+        log.info(" Request received for BY ALL PRODUCTO product : {} ", libroBuscar);
+        if (libroBuscar != null) {
+            libros = libroRepository.findByAllParmas("%"+libroBuscar.getTitulo() != null ?libroBuscar.getTitulo():"" +"%",
+                    "%"+libroBuscar.getEditorial()+"%",
+                    libroBuscar.getAnioPublicacion(),
+                    libroBuscar.getIsbn13(),
+                    libroBuscar.getIsbn10(),
+                    libroBuscar.getAutor());
+        }
+
+        return libros.isEmpty() ? null : libros;
     }
 }

@@ -9,6 +9,9 @@ eureka:
             defaultZone: ${EUREKA_URL:http://localhost:8761/eureka}
     instance:
         preferIpAddress: true
+        #valida que este arriba caso contrario lo elimina
+        lease-renewal-interval-in-seconds: 30
+        lease-expiration-duration-in-seconds: 90
     hostname: ms-alquiler-orders
 
 ## Configuracion de Spring
@@ -16,17 +19,14 @@ spring:
     application:
         name: ms-alquiler-orders
     datasource:
-        url: jdbc:h2:mem:testdb
+        url: jdbc:mysql://localhost:3306/actividadDos?useUnicode=true&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true&useSSL=false
+        username: root
+        password: Alexander1991
+        driver-class-name: com.mysql.cj.jdbc.Driver
     jpa:
         show-sql: true
         hibernate:
-            ddl-auto: update
-    h2:
-        console:
-            enabled: true
-            path: /h2-console
-            settings:
-                web-allow-others: true
+            ddl-auto: create
 
 ## Configuracion secundaria (custom)
 getLibro:
