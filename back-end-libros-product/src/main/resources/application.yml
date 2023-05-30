@@ -20,11 +20,12 @@ spring:
         username: postgres
         password: Alexander1991
         initialization-mode: always
+        data: classpath:/data.sql
 
     jpa:
         show-sql: true
         hibernate:
-            ddl-auto: create
+            ddl-auto: update
         properties:
             hibernate:
                 dialect: org.hibernate.dialect.PostgreSQLDialect

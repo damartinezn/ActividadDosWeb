@@ -104,12 +104,13 @@ public class LibroServiceImpl implements LibroService {
         List<Libro> libros = new ArrayList<>();
         log.info(" Request received for BY ALL PRODUCTO product : {} ", libroBuscar);
         if (libroBuscar != null) {
-            libros = libroRepository.findByAllParmas("%"+libroBuscar.getTitulo() != null ?libroBuscar.getTitulo():"" +"%",
-                    "%"+libroBuscar.getEditorial()+"%",
-                    libroBuscar.getAnioPublicacion(),
-                    libroBuscar.getIsbn13(),
-                    libroBuscar.getIsbn10(),
-                    libroBuscar.getAutor());
+            libros = libroRepository
+                    .findByTituloIgnoreCaseLikeAndEditorialIgnoreCaseLikeAndIsbn13IgnoreCaseLikeAndIsbn10IgnoreCaseLikeAndAutorIgnoreCaseLike(
+                            "%" + (libroBuscar.getTitulo() == null ? "" : libroBuscar.getTitulo()) + "%",
+                            "%" + (libroBuscar.getEditorial() == null ? "" : libroBuscar.getEditorial()) + "%",
+                            "%" + (libroBuscar.getIsbn13() == null ? "" : libroBuscar.getIsbn13()) + "%",
+                            "%" + (libroBuscar.getIsbn10() == null ? "" : libroBuscar.getIsbn10()) + "%",
+                            "%" + (libroBuscar.getAutor() == null ? "" : libroBuscar.getAutor()) + "%");
         }
 
         return libros.isEmpty() ? null : libros;
