@@ -6,6 +6,7 @@ import com.unir.librosproduct.model.pojo.Genero;
 import com.unir.librosproduct.model.pojo.Libro;
 import com.unir.librosproduct.model.request.CreateLibrorequest;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,9 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Service
 @Slf4j
@@ -69,20 +68,20 @@ public class LibroServiceImpl implements LibroService {
             if (request.getListCriticas() != null && request.getListCriticas().size() > 0) {
                 libro.setListCriticas(request.getListCriticas());
             }
+            Libro auxGuardado = libroRepository.save(libro);
             if (request.getListGenero() != null && request.getListGenero().size() > 0) {
+                auxGuardado.setListGenero(request.getListGenero());
                 for (var genero : request.getListGenero()) {
-                    Genero aux = generoRepository.findById(genero.getCodigo()).orElse(null);
+                    Genero aux = generoRepository.findById(genero.getCodigo())
+                            .orElseThrow(() -> new EntityNotFoundException(
+                                    "No se encontro el género con el id" + String.valueOf(genero.getCodigo())));
                     if (aux != null && libro.getListGenero() != null && libro.getListGenero().size() > 0) {
-                        libro.getListGenero().add(aux);
-                    }
-                    if (aux != null && libro.getListGenero() == null) {
-                        Set<Genero> auxgen = new HashSet<>();
-                        auxgen.add(aux);
-                        libro.setListGenero(auxgen);
+                        aux.getListLibro().add(auxGuardado);
                     }
                 }
+                auxGuardado = libroRepository.save(auxGuardado);
             }
-            return libroRepository.save(libro);
+            return auxGuardado;
         } else {
             return null;
         }
@@ -91,7 +90,8 @@ public class LibroServiceImpl implements LibroService {
     @Override
     public Libro alquilarLibro(Long libroId) {
         if (libroId != null) {
-            Libro libro = libroRepository.findById(libroId).orElse(null);
+            Libro libro = libroRepository.findById(libroId).orElseThrow(() -> new EntityNotFoundException(
+                "No se encontro el libro con el id : " + String.valueOf(libroId)));
             if (libro != null && libro.getCantidad() > 0) {
                 libro.setCantidad(libro.getCantidad() - 1);
                 return libroRepository.save(libro);
@@ -123,9 +123,52 @@ public class LibroServiceImpl implements LibroService {
     @Override
     public Libro devolverLibro(Long libroId) {
         if (libroId != null) {
-            Libro libro = libroRepository.findById(libroId).orElse(null);
+            Libro libro = libroRepository.findById(libroId).orElseThrow(() -> new EntityNotFoundException(
+                "No se encontro el libro con el id : " + String.valueOf(libroId)));
             libro.setCantidad(libro.getCantidad() + 1);
             return libroRepository.save(libro);
+        } else {
+            return null;
+        }
+    }
+
+    @Override
+    public Libro editLibro(Long librodId, CreateLibrorequest request) {
+        Libro editar = libroRepository.findById(librodId).orElseThrow(
+                () -> new EntityNotFoundException("No existe el libro con el ID : " + String.valueOf(librodId)));
+        if (request != null && StringUtils.hasLength(request.getTitulo().trim())
+                && StringUtils.hasLength(request.getEditorial().trim())
+                && StringUtils.hasLength(request.getIsbn13().trim())
+                && StringUtils.hasLength(request.getIsbn10().trim())
+                && StringUtils.hasLength(request.getImagen().trim())
+                && StringUtils.hasLength(request.getSipnosis().trim())
+                && request.getCantidad() != null && request.getCantidad() >= 0 && editar != null) {
+                editar.setTitulo(request.getTitulo());
+                editar.setAnioPublicacion(request.getAnioPublicacion());
+                editar.setEditorial(request.getEditorial());
+                editar.setIsbn13(request.getIsbn13());
+                editar.setIsbn10(request.getIsbn10());
+                editar.setImagen(request.getImagen());
+                editar.setSipnosis(request.getSipnosis());
+                editar.setCantidad(request.getCantidad());
+                editar.setAutor(request.getAutor());
+            if (request.getListCriticas() != null && request.getListCriticas().size() > 0) {
+                editar.setListCriticas(request.getListCriticas());
+            }
+            editar = libroRepository.save(editar);
+            if (request.getListGenero() != null && request.getListGenero().size() > 0) {
+                editar.setListGenero(request.getListGenero());
+                for (var genero : request.getListGenero()) {
+                    Genero aux = generoRepository.findById(genero.getCodigo())
+                            .orElseThrow(() -> new EntityNotFoundException(
+                                    "No se encontro el género con el id : " + String.valueOf(genero.getCodigo())));
+                    if (aux != null && editar.getListGenero() != null && editar.getListGenero().size() > 0) {
+                        aux.getListLibro().add(editar);
+                    }
+                }
+                editar = libroRepository.save(editar);
+            }
+            return editar;
         } else {
             return null;
         }
