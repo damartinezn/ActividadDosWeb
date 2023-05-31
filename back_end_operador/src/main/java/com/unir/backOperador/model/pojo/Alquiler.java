@@ -33,6 +33,10 @@ public class Alquiler {
     private Date fechaRegistro;
     @Column(name = "fechaFinAlquiler")
     private Date fechaFinAlquiler;
+    @Column(name = "fechaRealDevolucion")
+    private Date fechaRealDevolucion;
+    @Column(name = "estado")
+    private String estado;
 
     @PrePersist
     private void PrePersist() {

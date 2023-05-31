@@ -7,5 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.unir.backOperador.model.pojo.Alquiler;
 
 public interface AlquilerRepository extends JpaRepository<Alquiler, Long> {
-    List<Alquiler> findByLibroId(Long userIdLong);
+    List<Alquiler> findByLibroId(Long libroId);
+
+    List<Alquiler> findByUsuarioId(Long userId);
 }

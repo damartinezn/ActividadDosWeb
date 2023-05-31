@@ -32,4 +32,5 @@ spring:
 getLibro:
     url: http://ms-libro-products/libros/%s
     urlAlquiler: http://ms-libro-products/alquilar/%s
+    urlDevolver: http://ms-libro-products/devolver/%s
 

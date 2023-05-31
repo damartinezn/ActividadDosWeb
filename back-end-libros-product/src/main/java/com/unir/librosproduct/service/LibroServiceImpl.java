@@ -92,8 +92,12 @@ public class LibroServiceImpl implements LibroService {
     public Libro alquilarLibro(Long libroId) {
         if (libroId != null) {
             Libro libro = libroRepository.findById(libroId).orElse(null);
-            libro.setCantidad(libro.getCantidad() - 1);
-            return libroRepository.save(libro);
+            if (libro != null && libro.getCantidad() > 0) {
+                libro.setCantidad(libro.getCantidad() - 1);
+                return libroRepository.save(libro);
+            } else {
+                return null;
+            }
         } else {
             return null;
         }
@@ -114,5 +118,16 @@ public class LibroServiceImpl implements LibroService {
         }
 
         return libros.isEmpty() ? null : libros;
+    }
+
+    @Override
+    public Libro devolverLibro(Long libroId) {
+        if (libroId != null) {
+            Libro libro = libroRepository.findById(libroId).orElse(null);
+            libro.setCantidad(libro.getCantidad() + 1);
+            return libroRepository.save(libro);
+        } else {
+            return null;
+        }
     }
 }

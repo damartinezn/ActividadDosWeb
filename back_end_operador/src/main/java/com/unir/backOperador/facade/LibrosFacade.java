@@ -21,6 +21,9 @@ public class LibrosFacade {
     @Value("${getLibro.urlAlquiler}")
     private String getLibroAlquilarUrl;
 
+    @Value("${getLibro.urlDevolver}")
+    private String getLibroDevolverUrl;
+
     private final RestTemplate restTemplate;
 
     public Libro getLibroRest(String id) {
@@ -32,11 +35,20 @@ public class LibrosFacade {
         }
     }
 
-    public Libro postAlquilarLibroRest(String id) {
+    public Libro putAlquilarLibroRest(String id) {
         try {
-            log.info(" -----------************************----------------- : {} ", id);
-            log.info(" ---------------***************---------------------- : {} ", String.format(getLibroAlquilarUrl, id));
+            log.info(" url  : {} ", String.format(getLibroAlquilarUrl, id));
             return restTemplate.getForObject(String.format(getLibroAlquilarUrl, id), Libro.class);
+        } catch (HttpClientErrorException e) {
+            log.error("Client Error: {}, Product with ID {}", e.getStatusCode(), id);
+            return null;
+        }
+    }
+
+    public Libro putDevolverLibroRest(String id) {
+        try {
+            log.info(" url  : {} ", String.format(getLibroDevolverUrl, id));
+            return restTemplate.getForObject(String.format(getLibroDevolverUrl, id), Libro.class);
         } catch (HttpClientErrorException e) {
             log.error("Client Error: {}, Product with ID {}", e.getStatusCode(), id);
             return null;

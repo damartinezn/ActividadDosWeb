@@ -17,4 +17,6 @@ public interface LibroService {
     Libro createLibro(CreateLibrorequest request);
 
     Libro alquilarLibro(Long libroId);
+
+    Libro devolverLibro(Long libroId);
 }

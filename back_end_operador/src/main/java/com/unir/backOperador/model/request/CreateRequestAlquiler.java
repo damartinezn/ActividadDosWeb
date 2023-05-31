@@ -9,6 +9,7 @@ import lombok.*;
 @ToString
 public class CreateRequestAlquiler {
 
+    private Long alquilerId;
     private Long usuarioId;
     private Long libroId;
     private Integer cantidadDias;

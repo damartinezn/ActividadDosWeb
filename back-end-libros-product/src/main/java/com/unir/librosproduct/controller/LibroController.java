@@ -64,18 +64,6 @@ public class LibroController {
         }
     }
 
-    @GetMapping("/alquilar/{alquilarId}")
-    public ResponseEntity<Libro> cantidadAlquilarLibro(@PathVariable String alquilarId) {
-        log.info(" Alquilar libro con los nuevos valores me pueden mandar todo me interes el id cantidad y días : {} ",
-        alquilarId);
-        Libro saveLibro = libroService.alquilarLibro(Long.parseLong(alquilarId));
-        if (saveLibro != null) {
-            return ResponseEntity.status(HttpStatus.CREATED).body(saveLibro);
-        } else {
-            return ResponseEntity.badRequest().build();
-        }
-    }
-
     @PostMapping("/libros/buscar")
     public ResponseEntity<List<Libro>> getLibrosByAllParams(@RequestBody CreateLibrorequest request) {
         log.info(" Request save for libro : {} ", request.toString());
@@ -84,6 +72,28 @@ public class LibroController {
             return ResponseEntity.ok(getLibros);
         } else {
             return ResponseEntity.ok(Collections.emptyList());
+        }
+    }
+
+    @GetMapping("/alquilar/{alquilarId}")
+    public ResponseEntity<Libro> cantidadAlquilarLibro(@PathVariable String alquilarId) {
+        log.info(" Alquilar libro  : {} ", alquilarId);
+        Libro saveLibro = libroService.alquilarLibro(Long.parseLong(alquilarId));
+        if (saveLibro != null) {
+            return ResponseEntity.status(HttpStatus.CREATED).body(saveLibro);
+        } else {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @GetMapping("/devolver/{libroId}")
+    public ResponseEntity<Libro> cantidadDevovlerLibro(@PathVariable String libroId) {
+        log.info(" Devolver libro el id cantidad y días : {} ", libroId);
+        Libro saveLibro = libroService.devolverLibro(Long.parseLong(libroId));
+        if (saveLibro != null) {
+            return ResponseEntity.status(HttpStatus.CREATED).body(saveLibro);
+        } else {
+            return ResponseEntity.badRequest().build();
         }
     }
 
