@@ -2,6 +2,9 @@ package com.unir.backOperador.service;
 
 import com.unir.backOperador.data.AlquilerRepository;
 import com.unir.backOperador.model.request.Libro;
+
+import jakarta.persistence.EntityNotFoundException;
+
 import com.unir.backOperador.facade.LibrosFacade;
 import com.unir.backOperador.model.pojo.Alquiler;
 import com.unir.backOperador.model.request.CreateRequestAlquiler;
@@ -24,7 +27,7 @@ public class AlquilerServiceImpl implements AlquilerService {
 
     @Override
     public Alquiler aliquilarLibro(CreateRequestAlquiler request) {
-        log.info(" Elementos de entrada : {} ", request);
+        log.info(" Elementos de entrada :  ", request);
         if (request != null && request.getUsuarioId() > 0
                 && request.getLibroId() > 0
                 && request.getCantidadDias() > 0) {
@@ -59,10 +62,12 @@ public class AlquilerServiceImpl implements AlquilerService {
 
     @Override
     public Alquiler devolverLibro(Long alquilerId) {
-        log.info(" Elementos de entrada para devolver : {} ", alquilerId);
+        log.info(" Elementos de entrada para devolver :  ", alquilerId);
         if (alquilerId != null && alquilerId > 0) {
-            Alquiler devolver = alquilerRepository.findById(alquilerId).orElse(null);
-            if (devolver != null) {
+            Alquiler devolver = alquilerRepository.findById(alquilerId)
+                    .orElseThrow(() -> new EntityNotFoundException(
+                            "No se encontro el registro de alquiler con el id : " + String.valueOf(alquilerId)));
+            if (devolver != null && !devolver.getEstado().equalsIgnoreCase("F")) {
                 Boolean bandera = buscarLibro(devolver.getLibroId());
                 bandera = retonarLibro(devolver.getLibroId());
                 if (bandera) {

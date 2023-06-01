@@ -86,8 +86,8 @@ public class LibroController {
         }
     }
 
-    @PatchMapping("/alquilar/{alquilarId}")
-    public ResponseEntity<Libro> cantidadAlquilarLibro(@PathVariable String alquilarId, @RequestBody  CreateLibrorequest request) {
+    @PutMapping("/alquilar/{alquilarId}")
+    public ResponseEntity<Libro> cantidadAlquilarLibro(@PathVariable String alquilarId, @RequestBody(required = false)  CreateLibrorequest request) {
         log.info(" Alquilar libro  : {} ", alquilarId);
         Libro saveLibro = libroService.alquilarLibro(Long.parseLong(alquilarId));
         if (saveLibro != null) {
@@ -97,7 +97,7 @@ public class LibroController {
         }
     }
 
-    @PatchMapping("/devolver/{libroId}")
+    @PutMapping("/devolver/{libroId}")
     public ResponseEntity<Libro> cantidadDevolverLibro(@PathVariable String libroId, @RequestBody  CreateLibrorequest request) {
         log.info(" Devolver libro el id cantidad y días : {} ", libroId);
         Libro saveLibro = libroService.devolverLibro(Long.parseLong(libroId));

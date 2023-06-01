@@ -50,7 +50,7 @@ public class AlquilerController {
 
     @PostMapping("/alquilar")
     public ResponseEntity<Alquiler> alquilarLibro(@RequestBody CreateRequestAlquiler request) {
-        log.info(" Request save for libro : {} ", request.toString());
+        log.info(" Request save for libro : ------ ", request.toString());
         try {
             Alquiler guardado = alquilerService.aliquilarLibro(request);
             if (guardado != null) {
@@ -64,9 +64,9 @@ public class AlquilerController {
         }
     }
 
-    @PutMapping("/alquilar/{libroId}")
-    public ResponseEntity<Alquiler> devolverLibro(@PathVariable("libroId") String alquilerId) {
-        log.info(" Request save for libro : {} ", alquilerId);
+    @PutMapping("/devolver/{alquilerId}")
+    public ResponseEntity<Alquiler> devolverAlquiler(@PathVariable String alquilerId, @RequestBody(required = false)  CreateRequestAlquiler request) {
+        log.info(" Request devolver libro : ", alquilerId);
         try {
             Alquiler guardado = alquilerService.devolverLibro(Long.valueOf(alquilerId));
             if (guardado != null) {
