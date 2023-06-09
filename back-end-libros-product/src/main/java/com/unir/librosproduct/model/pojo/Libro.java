@@ -37,9 +37,9 @@ public class Libro {
         @Column(name = "imagen")
         @NonNull
         private String imagen;
-        @Column(name = "sipnosis")
+        @Column(name = "sinopsis")
         @NonNull
-        private String sipnosis;
+        private String sinopsis;
         @Column(name = "cantidad")
         @NonNull
         private Integer cantidad;

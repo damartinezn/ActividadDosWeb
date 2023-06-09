@@ -45,49 +45,67 @@ public class LibroController {
     @DeleteMapping("/libros/{libroId}")
     public ResponseEntity<Void> deleteLibro(@PathVariable String libroId) {
         log.info(" Request received for product : {} ", libroId);
-        Boolean removed = libroService.removeLibro(Long.parseLong(libroId));
-        if (Boolean.TRUE.equals(removed)) {
-            return ResponseEntity.ok().build();
-        } else {
-            return ResponseEntity.notFound().build();
+        try {
+            Boolean removed = libroService.removeLibro(Long.parseLong(libroId));
+            if (Boolean.TRUE.equals(removed)) {
+                return ResponseEntity.ok().build();
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
     @PostMapping("/libros")
     public ResponseEntity<Libro> saveLibro(@RequestBody CreateLibrorequest request) {
         log.info(" Request save for libro : {} ", request.toString());
-        Libro saveLibro = libroService.createLibro(request);
-        if (saveLibro != null) {
-            return ResponseEntity.status(HttpStatus.CREATED).body(saveLibro);
-        } else {
-            return ResponseEntity.badRequest().build();
+        try {
+            Libro saveLibro = libroService.createLibro(request);
+            if (saveLibro != null) {
+                return ResponseEntity.status(HttpStatus.CREATED).body(saveLibro);
+            } else {
+                return ResponseEntity.badRequest().build();
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
     @PutMapping("/libros/{libroId}")
-    public ResponseEntity<Libro> actualizarDevovlerLibro(@PathVariable String libroId, @RequestBody  CreateLibrorequest request) {
+    public ResponseEntity<Libro> actualizarDevovlerLibro(@PathVariable String libroId,
+            @RequestBody CreateLibrorequest request) {
         log.info(" Devolver libro el id cantidad y días : {} ", libroId);
-        Libro saveLibro = libroService.editLibro(Long.parseLong(libroId), request);
-        if (saveLibro != null) {
-            return ResponseEntity.status(HttpStatus.CREATED).body(saveLibro);
-        } else {
-            return ResponseEntity.badRequest().build();
+        try {
+            Libro saveLibro = libroService.editLibro(Long.parseLong(libroId), request);
+            if (saveLibro != null) {
+                return ResponseEntity.status(HttpStatus.CREATED).body(saveLibro);
+            } else {
+                return ResponseEntity.badRequest().build();
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
-    @PostMapping("/libros/buscar")
+    @PostMapping("/libros/search")
     public ResponseEntity<List<Libro>> getLibrosByAllParams(@RequestBody CreateLibrorequest request) {
         log.info(" Request save for libro : {} ", request.toString());
-        List<Libro> getLibros = libroService.getLibrosByAllParams(request);
-        if (getLibros != null) {
-            return ResponseEntity.ok(getLibros);
-        } else {
-            return ResponseEntity.ok(Collections.emptyList());
+        try {
+            List<Libro> getLibros = libroService.getLibrosByAllParams(request);
+            if (getLibros != null) {
+                return ResponseEntity.ok(getLibros);
+            } else {
+                return ResponseEntity.ok(Collections.emptyList());
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
-    @PutMapping("/alquilar/{alquilarId}")
-    public ResponseEntity<Libro> cantidadAlquilarLibro(@PathVariable String alquilarId, @RequestBody(required = false)  CreateLibrorequest request) {
+    @PutMapping("/libros/rent/{alquilarId}")
+    public ResponseEntity<Libro> cantidadAlquilarLibro(@PathVariable String alquilarId,
+            @RequestBody(required = false) CreateLibrorequest request) {
         log.info(" Alquilar libro  : {} ", alquilarId);
         Libro saveLibro = libroService.alquilarLibro(Long.parseLong(alquilarId));
         if (saveLibro != null) {
@@ -97,8 +115,9 @@ public class LibroController {
         }
     }
 
-    @PutMapping("/devolver/{libroId}")
-    public ResponseEntity<Libro> cantidadDevolverLibro(@PathVariable String libroId, @RequestBody  CreateLibrorequest request) {
+    @PutMapping("/libros/return/{libroId}")
+    public ResponseEntity<Libro> cantidadDevolverLibro(@PathVariable String libroId,
+            @RequestBody(required = false) CreateLibrorequest request) {
         log.info(" Devolver libro el id cantidad y días : {} ", libroId);
         Libro saveLibro = libroService.devolverLibro(Long.parseLong(libroId));
         if (saveLibro != null) {
@@ -107,6 +126,5 @@ public class LibroController {
             return ResponseEntity.badRequest().build();
         }
     }
-
 
 }

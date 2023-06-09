@@ -27,10 +27,15 @@ spring:
         show-sql: true
         hibernate:
             ddl-auto: create
+    http:
+        encoding:
+            charset: UTF-8
+            enabled: true
+            force: true
 
 ## Configuracion secundaria (custom)
 getLibro:
     url: http://ms-libro-products/libros/%s
-    urlAlquiler: http://ms-libro-products/alquilar/%s
-    urlDevolver: http://ms-libro-products/devolver/%s
+    urlAlquiler: http://ms-libro-products/libros/rent/%s
+    urlDevolver: http://ms-libro-products/libros/return/%s
 

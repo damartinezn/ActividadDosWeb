@@ -40,7 +40,7 @@ public class GeneroServiceImpl implements GeneroService {
     @Override
     public Genero createGenero(CreateRequestGenero request) {
         if (request != null && StringUtils.hasLength(request.getNombre().trim())
-                && StringUtils.hasLength(request.getNombre().trim())) {
+                && StringUtils.hasLength(request.getDescripcion().trim())) {
             Genero genero = Genero.builder().nombre(request.getNombre())
                     .descripcion(request.getDescripcion()).build();
             return generoRepository.save(genero);

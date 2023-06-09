@@ -39,7 +39,7 @@ public class LibrosFacade {
         try {
             return restTemplate.getForObject(String.format(getLibrosUrl, id), Libro.class);
         } catch (HttpClientErrorException e) {
-            log.error("Client Error: {}, Product with ID {}", e.getStatusCode(), id);
+            log.error("Client Error buscar libro id : ", e.getStatusCode(), id);
             return null;
         }
     }
@@ -60,7 +60,7 @@ public class LibrosFacade {
                     entity,
                     Libro.class);
             // Manejar la respuesta
-            Libro responseBody = new Libro();
+            Libro responseBody;
             if (response.getStatusCode().is2xxSuccessful()) {
                 // La solicitud fue exitosa
                 responseBody = response.getBody();
@@ -98,7 +98,7 @@ public class LibrosFacade {
                     entity,
                     Libro.class);
             // Manejar la respuesta
-            Libro responseBody = new Libro();
+            Libro responseBody;
             if (response.getStatusCode().is2xxSuccessful()) {
                 // La solicitud fue exitosa
                 responseBody = response.getBody();

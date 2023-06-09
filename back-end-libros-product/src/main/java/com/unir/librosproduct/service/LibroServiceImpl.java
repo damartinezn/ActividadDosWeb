@@ -49,20 +49,16 @@ public class LibroServiceImpl implements LibroService {
 
     @Override
     public Libro createLibro(CreateLibrorequest request) {
-        if (request != null && StringUtils.hasLength(request.getTitulo().trim())
-                && StringUtils.hasLength(request.getEditorial().trim())
-                && StringUtils.hasLength(request.getIsbn13().trim())
-                && StringUtils.hasLength(request.getIsbn10().trim())
-                && StringUtils.hasLength(request.getImagen().trim())
-                && StringUtils.hasLength(request.getSipnosis().trim())
-                && request.getCantidad() != null && request.getCantidad() >= 0) {
+        boolean validarLibro = validarLibro(request);
+
+        if (validarLibro) {
             Libro libro = Libro.builder().titulo(request.getTitulo())
                     .anioPublicacion(request.getAnioPublicacion())
                     .editorial(request.getEditorial())
                     .isbn13(request.getIsbn13())
                     .isbn10(request.getIsbn10())
                     .imagen(request.getImagen())
-                    .sipnosis(request.getSipnosis())
+                    .sinopsis(request.getSinopsis())
                     .cantidad(request.getCantidad())
                     .autor(request.getAutor()).build();
             if (request.getListCriticas() != null && request.getListCriticas().size() > 0) {
@@ -87,11 +83,36 @@ public class LibroServiceImpl implements LibroService {
         }
     }
 
+    public boolean validarLibro(CreateLibrorequest request) throws EntityNotFoundException {
+        boolean respuesta = true;
+        if (request.getListGenero() != null && request.getListGenero().size() > 0) {
+            for (var genero : request.getListGenero()) {
+                Genero aux = generoRepository.findById(genero.getCodigo()).orElse(null);
+                respuesta = aux == null ? false : true;
+                if (respuesta == false) {
+                    break;
+                }
+            }
+        }
+        if (request != null && StringUtils.hasLength(request.getTitulo().trim())
+                && StringUtils.hasLength(request.getEditorial().trim())
+                && StringUtils.hasLength(request.getIsbn13().trim())
+                && StringUtils.hasLength(request.getIsbn10().trim())
+                && StringUtils.hasLength(request.getImagen().trim())
+                && StringUtils.hasLength(request.getSinopsis().trim())
+                && request.getCantidad() != null && request.getCantidad() >= 0 && respuesta) {
+            respuesta = true;
+        } else {
+            respuesta = false;
+        }
+        return respuesta;
+    }
+
     @Override
     public Libro alquilarLibro(Long libroId) {
         if (libroId != null) {
             Libro libro = libroRepository.findById(libroId).orElseThrow(() -> new EntityNotFoundException(
-                "No se encontro el libro con el id : " + String.valueOf(libroId)));
+                    "No se encontro el libro con el id : " + String.valueOf(libroId)));
             if (libro != null && libro.getCantidad() > 0) {
                 libro.setCantidad(libro.getCantidad() - 1);
                 return libroRepository.save(libro);
@@ -124,7 +145,7 @@ public class LibroServiceImpl implements LibroService {
     public Libro devolverLibro(Long libroId) {
         if (libroId != null) {
             Libro libro = libroRepository.findById(libroId).orElseThrow(() -> new EntityNotFoundException(
-                "No se encontro el libro con el id : " + String.valueOf(libroId)));
+                    "No se encontro el libro con el id : " + String.valueOf(libroId)));
             libro.setCantidad(libro.getCantidad() + 1);
             return libroRepository.save(libro);
         } else {
@@ -136,22 +157,17 @@ public class LibroServiceImpl implements LibroService {
     public Libro editLibro(Long librodId, CreateLibrorequest request) {
         Libro editar = libroRepository.findById(librodId).orElseThrow(
                 () -> new EntityNotFoundException("No existe el libro con el ID : " + String.valueOf(librodId)));
-        if (request != null && StringUtils.hasLength(request.getTitulo().trim())
-                && StringUtils.hasLength(request.getEditorial().trim())
-                && StringUtils.hasLength(request.getIsbn13().trim())
-                && StringUtils.hasLength(request.getIsbn10().trim())
-                && StringUtils.hasLength(request.getImagen().trim())
-                && StringUtils.hasLength(request.getSipnosis().trim())
-                && request.getCantidad() != null && request.getCantidad() >= 0 && editar != null) {
-                editar.setTitulo(request.getTitulo());
-                editar.setAnioPublicacion(request.getAnioPublicacion());
-                editar.setEditorial(request.getEditorial());
-                editar.setIsbn13(request.getIsbn13());
-                editar.setIsbn10(request.getIsbn10());
-                editar.setImagen(request.getImagen());
-                editar.setSipnosis(request.getSipnosis());
-                editar.setCantidad(request.getCantidad());
-                editar.setAutor(request.getAutor());
+        boolean validarLibro = validarLibro(request);
+        if (validarLibro && editar != null) {
+            editar.setTitulo(request.getTitulo());
+            editar.setAnioPublicacion(request.getAnioPublicacion());
+            editar.setEditorial(request.getEditorial());
+            editar.setIsbn13(request.getIsbn13());
+            editar.setIsbn10(request.getIsbn10());
+            editar.setImagen(request.getImagen());
+            editar.setSinopsis(request.getSinopsis());
+            editar.setCantidad(request.getCantidad());
+            editar.setAutor(request.getAutor());
             if (request.getListCriticas() != null && request.getListCriticas().size() > 0) {
                 editar.setListCriticas(request.getListCriticas());
             }

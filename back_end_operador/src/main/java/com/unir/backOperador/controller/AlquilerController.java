@@ -26,7 +26,7 @@ public class AlquilerController {
 
     private final AlquilerService alquilerService;
 
-    @GetMapping("/alquilar/{libroId}")
+    @GetMapping("/alquilados/{libroId}")
     public ResponseEntity<List<Alquiler>> getLibrosAlquilados(@PathVariable String libroId) {
         log.info(" headers : {} ", libroId);
         List<Alquiler> librosAlquilados = alquilerService.findByLibro(Long.valueOf(libroId));
@@ -37,7 +37,7 @@ public class AlquilerController {
         }
     }
 
-    @GetMapping("/alquilar/user/{usuarioId}")
+    @GetMapping("/alquilados/users/{usuarioId}")
     public ResponseEntity<List<Alquiler>> getAlquiladosByUser(@PathVariable String usuarioId) {
         log.info(" headers : {} ", usuarioId);
         List<Alquiler> librosAlquilados = alquilerService.findByUsuario(Long.valueOf(usuarioId));
@@ -48,7 +48,7 @@ public class AlquilerController {
         }
     }
 
-    @PostMapping("/alquilar")
+    @PostMapping("/alquilados")
     public ResponseEntity<Alquiler> alquilarLibro(@RequestBody CreateRequestAlquiler request) {
         log.info(" Request save for libro : ------ ", request.toString());
         try {
@@ -64,8 +64,9 @@ public class AlquilerController {
         }
     }
 
-    @PutMapping("/devolver/{alquilerId}")
-    public ResponseEntity<Alquiler> devolverAlquiler(@PathVariable String alquilerId, @RequestBody(required = false)  CreateRequestAlquiler request) {
+    @PutMapping("/alquilados/{alquilerId}")
+    public ResponseEntity<Alquiler> devolverAlquiler(@PathVariable String alquilerId,
+            @RequestBody(required = false) CreateRequestAlquiler request) {
         log.info(" Request devolver libro : ", alquilerId);
         try {
             Alquiler guardado = alquilerService.devolverLibro(Long.valueOf(alquilerId));

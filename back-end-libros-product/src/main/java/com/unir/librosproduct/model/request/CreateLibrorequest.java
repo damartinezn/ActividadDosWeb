@@ -21,7 +21,7 @@ public class CreateLibrorequest {
     private String isbn13;
     private String isbn10;
     private String imagen;
-    private String sipnosis;
+    private String sinopsis;
     private String autor;
     private Integer cantidad;
     List<Critica> listCriticas;

@@ -20,7 +20,7 @@ public class Libro {
         private String isbn13;
         private String isbn10;
         private String imagen;
-        private String sipnosis;
+        private String sinopsis;
         private Integer cantidad;
         private String autor;
         private List<Critica> listCriticas;

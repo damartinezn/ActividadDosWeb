@@ -1,6 +1,5 @@
 package com.unir.librosproduct.model.pojo;
 
-import java.util.HashSet;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -28,5 +27,5 @@ public class Genero {
 
     @ManyToMany(mappedBy = "listGenero")
     @JsonIgnore
-    private Set<Libro> listLibro = new HashSet();
+    private Set<Libro> listLibro ;
 }

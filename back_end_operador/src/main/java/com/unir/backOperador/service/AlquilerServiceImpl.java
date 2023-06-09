@@ -31,10 +31,10 @@ public class AlquilerServiceImpl implements AlquilerService {
         if (request != null && request.getUsuarioId() > 0
                 && request.getLibroId() > 0
                 && request.getCantidadDias() > 0) {
-            Boolean bandera = buscarLibro(request.getLibroId());
-            bandera = alquilarLibro(request.getLibroId());
-            Alquiler save = new Alquiler();
-            if (bandera) {
+            boolean bandera = buscarLibro(request.getLibroId());
+            boolean banderaalquiler = alquilarLibro(request.getLibroId());
+            Alquiler save;
+            if (bandera && banderaalquiler) {
                 Alquiler alquiler = Alquiler.builder().usuarioId(request.getUsuarioId())
                         .libroId(request.getLibroId()).cantidadDias(request.getCantidadDias())
                         .estado("V").build();
@@ -68,9 +68,9 @@ public class AlquilerServiceImpl implements AlquilerService {
                     .orElseThrow(() -> new EntityNotFoundException(
                             "No se encontro el registro de alquiler con el id : " + String.valueOf(alquilerId)));
             if (devolver != null && !devolver.getEstado().equalsIgnoreCase("F")) {
-                Boolean bandera = buscarLibro(devolver.getLibroId());
-                bandera = retonarLibro(devolver.getLibroId());
-                if (bandera) {
+                boolean bandera = buscarLibro(devolver.getLibroId());
+                boolean banderaRetorna = retonarLibro(devolver.getLibroId());
+                if (bandera && banderaRetorna) {
                     devolver.setEstado("F");
                     devolver.setFechaRealDevolucion(new Date());
                     devolver = alquilerRepository.save(devolver);

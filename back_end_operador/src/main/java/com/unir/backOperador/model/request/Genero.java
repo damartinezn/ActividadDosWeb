@@ -13,7 +13,4 @@ public class Genero {
     private String nombre;
     private String descripcion;
 
-    // @ManyToMany(mappedBy = "listGenero")
-    // @JsonIgnore
-    // private Set<Libro> listLibro = new HashSet<>();
 }
