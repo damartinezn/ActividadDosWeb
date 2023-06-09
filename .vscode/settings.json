@@ -1,5 +1,0 @@
-{
-    "java.compile.nullAnalysis.mode": "automatic",
-    "java.dependency.packagePresentation": "flat",
-    "java.configuration.updateBuildConfiguration": "interactive"
-}
